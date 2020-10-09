@@ -1,7 +1,6 @@
 const { gql } = require('apollo-server');
 
-const types = `
-
+const types = gql`
   type Item {
     price: String
     owner: User
