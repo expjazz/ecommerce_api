@@ -12,10 +12,10 @@ const userResolver = {
   },
 
   User: {
-    items(parent) {
-      console.log('here');
-      const user = User.findById(parent._id);
-      return user.populate('items');
+    async items(parent) {
+      console.log('object');
+      const user = await User.findById(parent._id).populate('items');
+      return user.items;
     },
   },
 

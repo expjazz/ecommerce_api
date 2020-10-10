@@ -19,9 +19,14 @@ const itemResolver = {
     },
   },
   Mutation: {
-    createItem(_, { item, ownerId }) {
+    async createItem(_, { item, ownerId }) {
       const newItem = new Item({ ...item, owner: ownerId });
-      return newItem.save();
+      newItem.save();
+      const owner = await User.findById(ownerId);
+      owner.items.push(newItem);
+      owner.save();
+
+      return newItem;
     },
     updateItem(_, { id, item }) {
       return Item.findByIdAndUpdate(id, item, {
