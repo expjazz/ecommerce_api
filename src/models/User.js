@@ -5,7 +5,4 @@ const UserSchema = mongoose.Schema({
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
 });
 
-const ItemSchema = mongoose.Schema({
-  price: String,
-  owner: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-});
+module.exports = mongoose.model('User', UserSchema);

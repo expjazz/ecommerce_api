@@ -5,4 +5,4 @@ const ItemSchema = mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-module.exports('Item', ItemSchema);
+module.exports = mongoose.model('Item', ItemSchema);
