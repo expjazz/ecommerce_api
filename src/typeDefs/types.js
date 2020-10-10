@@ -8,6 +8,7 @@ const types = gql`
   type User {
     id: ID!
     email: String
+    items: [Item]
   }
 `;
 

@@ -1,4 +1,5 @@
 const Item = require('../models/Item');
+const User = require('../models/User');
 
 const itemResolver = {
   Query: {
@@ -9,9 +10,17 @@ const itemResolver = {
       return Item.findById(id);
     },
   },
+  Item: {
+    owner(parent) {
+      const user = User.findById(parent.owner);
+      console.log(parent.owner);
+      user.populate('owner').exec();
+      return user;
+    },
+  },
   Mutation: {
-    createItem(_, { item }) {
-      const newItem = new Item(item);
+    createItem(_, { item, ownerId }) {
+      const newItem = new Item({ ...item, owner: ownerId });
       return newItem.save();
     },
     updateItem(_, { id, item }) {

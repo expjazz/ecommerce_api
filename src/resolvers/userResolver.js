@@ -11,13 +11,21 @@ const userResolver = {
     },
   },
 
+  User: {
+    items(parent) {
+      console.log('here');
+      const user = User.findById(parent._id);
+      return user.populate('items');
+    },
+  },
+
   Mutation: {
     createUser(_, { user }) {
       const newUser = new User(user);
       return newUser.save();
     },
     updateUser(_, { id, user }) {
-      return User.findByIdAndUpdate(id, fruit, {
+      return User.findByIdAndUpdate(id, user, {
         new: true,
         useFindAndModify: false,
       });

@@ -5,7 +5,7 @@ const mutation = gql`
     createUser(user: UserInput): User
     updateUser(id: String, user: UserInput): User
     deleteUser(id: String): User
-    createItem(item: ItemInput): Item
+    createItem(item: ItemInput, ownerId: String): Item
     updateItem(id: String, item: ItemInput): Item
     deleteItem(id: String): Item
   }
@@ -16,7 +16,6 @@ const mutation = gql`
 
   input ItemInput {
     price: String
-    owner: UserInput
   }
 `;
 
