@@ -4,7 +4,12 @@ const User = require('../models/User');
 
 const userResolver = {
   Query: {
-    users() {
+    async users() {
+      const x = await User.updateMany(
+        { password: null },
+        { password: 'updated ss' }
+      );
+      console.log(x.n);
       return User.find();
     },
 
