@@ -65,6 +65,18 @@ const userResolver = {
 
       return newUser;
     },
+    async confirmUser(_, { token }) {
+      const verification = EmailVerification.findById(token);
+      if (!verification) {
+        return null;
+      }
+
+      const userId = verification._userId;
+      const user = User.findById(userId);
+      user.active = true;
+      user.save();
+      return user;
+    },
     updateUser(_, { id, user }) {
       return User.findByIdAndUpdate(id, user, {
         new: true,
