@@ -9,6 +9,7 @@ const types = gql`
     id: ID!
     email: String
     password: String
+    active: Boolean
     items: [Item]
   }
 `;

@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const EmailVerification = require('../models/emailVerification');
+const { transporter, niceEmail } = require('../mail');
 
 const userResolver = {
   Query: {
@@ -45,6 +47,22 @@ const userResolver = {
         httpOnly: true,
         maxAge: 100 * 60 * 60 * 24 * 365,
       });
+      const emailToken = jwt.sign({ userId: newUser._id }, 'emailVerification');
+      const verification = await new EmailVerification({
+        _userId: newUser.id,
+        token: emailToken,
+      });
+      verification.save();
+      console.log(verification);
+      const mailRes = await transporter.sendMail({
+        from: 'expeditojazz@gmail.com',
+        to: newUser.email,
+        subject: 'Click here to validate',
+        html: niceEmail(`Your Password Reset Token is here!
+      \n\n
+      <p>Click Here to Confirm ${verification._id} </p>`),
+      });
+
       return newUser;
     },
     updateUser(_, { id, user }) {
