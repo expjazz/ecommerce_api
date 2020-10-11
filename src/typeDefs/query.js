@@ -6,6 +6,7 @@ const query = gql`
     item(id: ID!): Item
     users: [User]
     user(id: ID!): User
+    currentUser: User
   }
 `;
 

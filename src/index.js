@@ -29,16 +29,22 @@ mongoose
 const opts = {
   cors: {
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000'],
   },
 };
 
-const server = new GraphQLServer({ typeDefs, resolvers });
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+  context: (request) => ({ ...request }),
+});
 
 server.express.use(cookieParser());
 server.express.use((req, res, next) => {
   const { token } = req.cookies;
+
   if (token) {
+    console.log('here');
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
     req.userId = userId;
   }
