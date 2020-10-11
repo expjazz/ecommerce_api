@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -8,19 +7,23 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
-const mailOptions = {
-  from: process.env.EMAIL_USER,
-  to: 'srmorm',
-  subject: 'Email de teste',
-  text: 'Teste',
-};
 
-console.log(process.env.EMAIL_USER);
+const niceEmail = (text) =>
+  `  
+  <div className="email" style="
+    border: 1px solid black;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>Hello There!</h2>
+    <p>${text}</p>
 
-transporter.sendMail(mailOptions, function (error, info) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log(`Email sent: ${info.response}`);
-  }
-});
+    <p>😘, Ecommerce Team</p>
+  </div>
+  
+  `;
+
+exports.transport = transporter;
+exports.makeANiceEmail = niceEmail;
