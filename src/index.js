@@ -1,8 +1,11 @@
-const { ApolloServer } = require('apollo-server');
+const { GraphQLServer } = require('graphql-yoga');
+
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 require('dotenv').config();
-const mongoose = require('mongoose');
 
 const db = {
   host: process.env.DB_HOST,
@@ -23,9 +26,23 @@ mongoose
   .then(console.log('Database connected'))
   .catch((error) => console.log('Database failed: ', error));
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const opts = {
+  cors: {
+    credentials: true,
+    origin: 'http://localhost:3000',
+  },
+};
 
-server
-  .listen()
-  .then(({ url }) => console.log(`Server ready at ${url}`))
-  .catch((error) => console.log('Server failed:', error));
+const server = new GraphQLServer({ typeDefs, resolvers });
+
+server.express.use(cookieParser());
+server.express.use((req, res, next) => {
+  const { token } = req.cookies;
+  if (token) {
+    const { userId } = jwt.verify(token, process.env.APP_SECRET);
+    req.userId = userId;
+  }
+  next();
+});
+
+server.start(opts, (port) => console.log(`server starts at ${port.port}`));
