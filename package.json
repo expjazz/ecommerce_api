@@ -27,7 +27,8 @@
     "graphql": "^15.3.0",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.9"
+    "mongoose": "^5.10.9",
+    "nodemailer": "^6.4.13"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
