@@ -53,7 +53,6 @@ const userResolver = {
         token: emailToken,
       });
       verification.save();
-      console.log(verification);
       const mailRes = await transporter.sendMail({
         from: 'expeditojazz@gmail.com',
         to: newUser.email,
@@ -66,13 +65,13 @@ const userResolver = {
       return newUser;
     },
     async confirmUser(_, { token }) {
-      const verification = EmailVerification.findById(token);
+      const verification = await EmailVerification.findById(token);
       if (!verification) {
         return null;
       }
 
       const userId = verification._userId;
-      const user = User.findById(userId);
+      const user = await User.findById(userId);
       user.active = true;
       user.save();
       return user;
